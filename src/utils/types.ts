@@ -1,4 +1,4 @@
-export type CreateUserParams = {
+export type CreateProviderParams = {
     fname: string;
     lname: string;
     username: string;
@@ -6,7 +6,7 @@ export type CreateUserParams = {
     password: string;
 }
 
-export type UpdateUserParams = {
+export type UpdateProviderParams = {
     fname: string;
     lname: string;
     username: string;
@@ -34,4 +34,13 @@ export type UpdateCompanyInfoParams = {
     company_address: string;
     company_mail: string;
     services: string;
+}
+
+export type CreateJobSeekerParams = {
+    fname: string;
+    lname: string;
+    username: string;
+    email: string;
+    password: string;
+    current_occu: string;
 }

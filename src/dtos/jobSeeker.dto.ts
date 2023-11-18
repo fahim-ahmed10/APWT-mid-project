@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsEmail, IsStrongPassword, IsOptional} from "class-validator";
 
-export class CreateProviderDto{
+export class CreateJobSeekerDto{
     @IsString()
     @IsNotEmpty()
     fname: string;
@@ -24,10 +24,10 @@ export class CreateProviderDto{
 
     @IsString()
     @IsNotEmpty()
-    work_position: string
+    current_occu:string;
 }
 
-export class UpdateProviderDto{
+export class UpdateJobSeekerDto{
     @IsOptional()
     @IsString()
     @IsNotEmpty()
@@ -52,12 +52,10 @@ export class UpdateProviderDto{
     @IsOptional()
     @IsNotEmpty()
     //@IsStrongPassword()
-    password: string;
+    password: string; 
 
     @IsOptional()
     @IsString()
     @IsNotEmpty()
-    work_position: string
-
+    current_occu:string;
 }
-

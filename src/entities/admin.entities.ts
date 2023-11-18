@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+;import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import { JobProvider } from './jobProvider.entity';
+import { JobSeeker } from './jobSeeker.entities';
 
 @Entity({name: 'admin'})
 export class Admin {
@@ -17,4 +19,9 @@ export class Admin {
     @Column({nullable: true})
     updatedAt: Date;
 
+    @OneToMany(() => JobProvider, (jobProvider) => jobProvider.admin)
+    jobProviders: JobProvider[];
+
+    @OneToMany(() => JobSeeker, (jobSeeker) => jobSeeker.admin)
+    jobSeekers: JobSeeker[]; 
 }

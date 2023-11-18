@@ -7,6 +7,7 @@ import { JobProvider } from './entities/jobProvider.entity';
 import { AdminModule } from './admin/admin.module';
 import { Admin } from './entities/admin.entities';
 import { CompanyInfo } from './entities/companyInfo.entities';
+import { JobSeeker } from './entities/jobSeeker.entities';
 
 @Module({
   imports: [AdminModule, JobProviderModule, TypeOrmModule.forRoot(
@@ -17,7 +18,7 @@ import { CompanyInfo } from './entities/companyInfo.entities';
       username: 'postgres',
       password: '1234',
       database: 'admin',//Change to your database name
-      entities: [Admin, JobProvider, CompanyInfo],
+      entities: [Admin, JobProvider, CompanyInfo, JobSeeker],
       autoLoadEntities: true,
       synchronize: true,
     }),

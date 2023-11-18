@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
-import { CompanyInfo } from './companyInfo.entities';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Admin } from './admin.entities';
 
-@Entity({name: 'jobproviders'})
-export class JobProvider {
+
+@Entity({name: 'jobseekers'})
+export class JobSeeker {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -23,7 +23,7 @@ export class JobProvider {
     password: string;
 
     @Column()
-    work_position: string;
+    current_occu: string;
 
     @Column({nullable: true})
     createdAt: Date;
@@ -31,13 +31,8 @@ export class JobProvider {
     @Column({nullable: true})
     updatedAt: Date;
 
-    @ManyToOne(() => Admin, (admin) => admin.jobProviders)
+    @ManyToOne(() => Admin, (admin) => admin.jobSeekers)
     admin: Admin;
-    
-    @JoinColumn()
-    @OneToOne(() => CompanyInfo)
-    companyInfo: CompanyInfo;
-
     
 
 }

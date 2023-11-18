@@ -2,10 +2,8 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CompanyInfo } from "src/entities/companyInfo.entities";
 import { JobProvider } from "src/entities/jobProvider.entity";
-import { CreateCompanyInfoParams, CreateUserParams, UpdateUserParams } from "src/utils/types";
+import { CreateCompanyInfoParams } from "src/utils/types";
 import { Repository } from "typeorm";
-
-
 
 
 
@@ -19,29 +17,6 @@ export class JobProviderService {
 
     ) { }
 
-    findUsers() {
-        return this.providerRepository.find();
-
-    }
-    findUser(id: number) {
-        return this.providerRepository.findOneBy({ id: id });
-    }
-    createUser(userDetails: CreateUserParams) {
-        const newUser = this.providerRepository.create({
-            ...userDetails,
-            createdAt: new Date()
-        });
-        return this.providerRepository.save(newUser);
-    }
-
-    updateUser(id: number, updateUserDetails: UpdateUserParams) {
-        return this.providerRepository.update({ id }, { ...updateUserDetails, updatedAt: new Date() });
-
-    }
-
-    deleteUser(id: number) {
-        return this.providerRepository.delete({ id });
-    }
 
     //Company info creation through companyInfo entities
     async createcompanyInfo(id: number, CreateCompanyDetails: CreateCompanyInfoParams){
@@ -57,6 +32,10 @@ export class JobProviderService {
         provider.companyInfo = savedCompanyDetails;
         return this.providerRepository.save(provider);
 
+    }
+    //delete company info
+    deleteCompanyInfoById(id: number) {
+        return this.companyInfoRepository.delete({ id });
     }
 
 }
