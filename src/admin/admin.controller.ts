@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put, HttpCode, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, HttpCode, Delete } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { Admin } from 'src/entities/admin.entities';
 import { CreateAdminDto, UpdateAdminDto } from 'src/dtos/admin.dto';
 import { CreateJobSeekerDto } from 'src/dtos/jobSeeker.dto';
-import { JobProvider } from 'src/entities/jobProvider.entity';
-import { CreateProviderDto, UpdateProviderDto } from 'src/dtos/jobProvider.dto';
+import { CreateProviderDto } from 'src/dtos/jobProvider.dto';
 
 
 
@@ -35,40 +34,14 @@ export class AdminController {
     //     await this.adminService.deleteAdmin(id);
     // }
 
-    //find all job provider
-    @Get('jobprovider')
-    async findJobProviders() {
-        return await this.adminService.findJobProviders();
-    }
-    //find job provider by id
-    @Get('jobprovider/:id')
-    async findJobProviderById(@Param('id', ParseIntPipe) id: number): Promise<JobProvider> {
-        return await this.adminService.findJobProviderById(id);
-    }
-
-    //create job provider
-    // @Post('jobprovider')
-    // async createJobProvider(@Body() CreateProviderDto: CreateProviderDto): Promise<JobProvider> {
-    //     return await this.adminService.createJobProvider(CreateProviderDto);
-    // }
 
     //create job provider through admin id
     @Post(':id/jobprovider')
     createJobProviderThroughAdminId(@Param('id', ParseIntPipe) id: number, @Body() CreateProviderDto: CreateProviderDto) {
         return this.adminService.createJobProviderThroughAdminId(id, CreateProviderDto);
     }
-    //update job provider
-    @Put('jobprovider/:id')
-    async updateJobProviderById(@Param('id', ParseIntPipe) id: number, @Body() UpdateProviderDto: UpdateProviderDto) {
-        return await this.adminService.updateJobProviderById(id, UpdateProviderDto);
-    }
-    //delete job provider
-    @HttpCode(204)
-    @Delete('jobprovider/:id')
-    async deleteJobProviderById(@Param('id', ParseIntPipe) id: number): Promise<void> {
-        await this.adminService.deleteJobProviderById(id);
-    }
-
+   
+    //create job seeker from admin id
     @Post(':id/jobseeker')
     createJobSeekerThroughAdminId(@Param('id', ParseIntPipe) id: number, @Body() CreateJobSeekerDto: CreateJobSeekerDto)
     {
@@ -80,5 +53,6 @@ export class AdminController {
     async deleteJobSeekerById(@Param('id', ParseIntPipe) id: number): Promise<void> {
         await this.adminService.deleteJobSeekerById(id);
     }
+
 
 }

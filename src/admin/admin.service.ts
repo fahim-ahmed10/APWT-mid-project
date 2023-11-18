@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Admin } from "src/entities/admin.entities";
 import { JobProvider } from "src/entities/jobProvider.entity";
 import { JobSeeker } from "src/entities/jobSeeker.entities";
-import { CreateAdminParams, CreateJobSeekerParams, CreateProviderParams, UpdateAdminParams, UpdateProviderParams } from "src/utils/types";
+import { CreateAdminParams, CreateJobSeekerParams, CreateProviderParams, UpdateAdminParams } from "src/utils/types";
 import { Repository } from "typeorm";
 
 
@@ -24,7 +24,7 @@ export class AdminService {
 
     //find admin
     findAdmin() {
-        return this.adminRepository.find({ relations: ['jobProviders', 'jobSeekers'] });
+         return this.adminRepository.find({ relations: ['jobProviders','jobSeekers'] });
 
     }
     //create admin
@@ -44,23 +44,7 @@ export class AdminService {
     // deleteAdmin(id: number) {
     //     return this.adminRepository.delete({ id });
     // }
-    //find all jobProvider
-    findJobProviders() {
-        return this.providerRepository.find({ relations: ['admin', 'companyInfo'] });
-
-    }
-    //find job provider by id
-    findJobProviderById(id: number) {
-        return this.providerRepository.findOneBy({ id: id });
-    }
-    //create job provider
-    // createJobProvider(userDetails: CreateUserParams) {
-    //     const newUser = this.providerRepository.create({
-    //         ...userDetails,
-    //         createdAt: new Date()
-    //     });
-    //     return this.providerRepository.save(newUser);
-    // }
+    
     //create job provider through admin id
     async createJobProviderThroughAdminId(id: number, providerDetails: CreateProviderParams) {
         const admin = await this.adminRepository.findOneBy({ id });
@@ -73,16 +57,7 @@ export class AdminService {
             createdAt: new Date()
         });
         return await this.providerRepository.save(newProvider);
-    }
-    //update job provider    
-    updateJobProviderById(id: number, updateUserDetails: UpdateProviderParams) {
-        return this.providerRepository.update({ id }, { ...updateUserDetails, updatedAt: new Date() });
-
-    }
-    //delete job provider
-    deleteJobProviderById(id: number) {
-        return this.providerRepository.delete({ id });
-    }
+    }   
 
 
     async createJobSeekerThroughAdminId(id: number, jobSeekerDetails: CreateJobSeekerParams) {

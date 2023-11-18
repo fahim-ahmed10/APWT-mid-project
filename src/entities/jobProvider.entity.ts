@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { CompanyInfo } from './companyInfo.entities';
 import { Admin } from './admin.entities';
+import { Interviwer } from './interviwer.entities';
 
 @Entity({name: 'jobproviders'})
 export class JobProvider {
@@ -34,6 +35,9 @@ export class JobProvider {
     @ManyToOne(() => Admin, (admin) => admin.jobProviders)
     admin: Admin;
     
+    @OneToMany(() => Interviwer, (interviwer) => interviwer.jobProviders)
+    interviwers: Interviwer[];
+
     @JoinColumn()
     @OneToOne(() => CompanyInfo)
     companyInfo: CompanyInfo;
