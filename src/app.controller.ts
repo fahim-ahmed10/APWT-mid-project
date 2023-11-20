@@ -1,9 +1,11 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, HttpCode, ParseEnumPipe, ParseUUIDPipe, UploadedFile, UseInterceptors, Res, Query } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Put, Delete, HttpCode, ParseEnumPipe, ParseUUIDPipe, Query, UseInterceptors, UploadedFile, Res } from "@nestjs/common";
 import { CreateUserDto, UpdateUserDto } from "src/dtos/appData.dto";
 import { AppService } from "./app.service";
-import { FileInterceptor } from '@nestjs/platform-express';
 import { UserType } from "./data";
-import { MulterError, diskStorage } from 'multer';
+import { FileInterceptor } from "@nestjs/platform-express";
+import { MulterError, diskStorage } from "multer";
+
+
 
 interface queryParams {
   name: string;
@@ -66,7 +68,8 @@ export class AppController {
 
 
 
-  @Post('upload')
+
+  @Post('fileupload')
   @UseInterceptors(FileInterceptor('file',
     {
       fileFilter: (req, file, cb) => {
@@ -76,7 +79,7 @@ export class AppController {
           cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
         }
       },
-      limits: { fileSize: 3000000 },
+      limits: { fileSize: 30000000 },
       storage: diskStorage({
         destination: './uploads',
         filename: function (req, file, cb) {
@@ -92,6 +95,9 @@ export class AppController {
   getImages(@Param('name') name, @Res() res) {
     res.sendFile(name, { root: './uploads' })
   }
+
+
+
 }
 
 

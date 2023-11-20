@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Admin } from "src/entities/admin.entities";
 import { JobProvider } from "src/entities/jobProvider.entity";
 import { JobSeeker } from "src/entities/jobSeeker.entities";
-import { CreateAdminParams, CreateJobSeekerParams, CreateProviderParams, UpdateAdminParams } from "src/utils/types";
+import { CreateAdminParams, CreateJobSeekerParams, CreateProviderParams, UpdateAdminParams, UpdateJobSeekerParams } from "src/utils/types";
 import { Repository } from "typeorm";
 
 
@@ -23,7 +23,11 @@ export class AdminService {
     ) { }
 
     //find admin
-    findAdmin() {
+    async findAdmin() {
+        const search = await this.adminRepository.find();
+        if (!search)
+            throw new HttpException(
+                'Admin not found', HttpStatus.BAD_REQUEST);
          return this.adminRepository.find({ relations: ['jobProviders','jobSeekers'] });
 
     }
@@ -58,8 +62,16 @@ export class AdminService {
         });
         return await this.providerRepository.save(newProvider);
     }   
+    //find job seeker by id
+    async findJobSeekerById(id: number) {
+        const search = await this.seekerRepository.findOneBy({ id });
+        if (!search)
+            throw new HttpException(
+                'Job seeker not found', HttpStatus.BAD_REQUEST);
+        return this.seekerRepository.findOneBy({ id: id });
+    }
 
-
+    //create job seeker
     async createJobSeekerThroughAdminId(id: number, jobSeekerDetails: CreateJobSeekerParams) {
         const admin = await this.adminRepository.findOneBy({ id });
         if (!admin)
@@ -73,9 +85,16 @@ export class AdminService {
         return this.seekerRepository.save(newSeeker);
 
     }
-    //delete job seeker
-    deleteJobSeekerById(id: number) {
+    
+    //update job seeker    
+    updateJobSeekerById(id: number, updateUserDetails: UpdateJobSeekerParams) {
+        return this.seekerRepository.update({ id }, { ...updateUserDetails, updatedAt: new Date() });
+
+    }
+     //delete job seeker
+     deleteJobSeekerById(id: number) {
         return this.seekerRepository.delete({ id });
     }
+   
 
 }

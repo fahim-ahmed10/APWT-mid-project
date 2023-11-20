@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CompanyInfo } from "src/entities/companyInfo.entities";
 import { Interviwer } from "src/entities/interviwer.entities";
 import { JobProvider } from "src/entities/jobProvider.entity";
-import { CreateCompanyInfoParams, CreateInterviwerParams, CreateProviderParams, UpdateProviderParams} from "src/utils/types";
+import { CreateCompanyInfoParams, CreateInterviwerParams, CreateProviderParams, UpdateCompanyInfoParams, UpdateProviderParams } from "src/utils/types";
 import { Repository } from "typeorm";
 
 
@@ -20,14 +20,31 @@ export class JobProviderService {
 
     ) { }
     //find all jobProvider
-    findJobProviders() {
+    async findJobProviders() {
+        const search = await this.providerRepository.find();
+        if (!search)
+            throw new HttpException(
+                'Job provider not found', HttpStatus.BAD_REQUEST);
         return this.providerRepository.find({ relations: ['admin', 'companyInfo', 'interviwers'] });
 
     }
     //find job provider by id
-    findJobProviderById(id: number) {
+    async findJobProviderById(id: number) {
+        const search = await this.providerRepository.findOneBy({ id });
+        if (!search)
+            throw new HttpException(
+                'Job provider not found', HttpStatus.BAD_REQUEST);
         return this.providerRepository.findOneBy({ id: id });
     }
+    // //extract job provider username by id
+    // async getUnameById(id: number, username: string) {
+    //     const search = await this.providerRepository.findOneBy({id });
+    //     if (!search)
+    //         throw new HttpException(
+    //             'Username not found', HttpStatus.BAD_REQUEST);
+    //     return this.providerRepository.findBy({username: username});
+    // }
+
     //create job provider
     createJobProvider(userDetails: CreateProviderParams) {
         const newUser = this.providerRepository.create({
@@ -46,7 +63,14 @@ export class JobProviderService {
     deleteJobProviderById(id: number) {
         return this.providerRepository.delete({ id });
     }
-
+    //find company info by id
+    async findCompanyInfoById(id: number) {
+        const search = await this.companyInfoRepository.findOneBy({ id });
+        if (!search)
+            throw new HttpException(
+                'Company info not found', HttpStatus.BAD_REQUEST);
+        return this.companyInfoRepository.findOneBy({ id: id });
+    }
     //Company info creation through companyInfo entities
     async createcompanyInfo(id: number, CreateCompanyInfoParams: CreateCompanyInfoParams) {
         const provider = await this.providerRepository.findOneBy({ id });
@@ -62,9 +86,22 @@ export class JobProviderService {
         return this.providerRepository.save(provider);
 
     }
+    //update company info    
+    updateCompanyInfoById(id: number, updateUserDetails: UpdateCompanyInfoParams) {
+        return this.companyInfoRepository.update({ id }, { ...updateUserDetails, updatedAt: new Date() });
+
+    }
     //delete company info by id
     deleteCompanyInfoById(id: number) {
         return this.companyInfoRepository.delete({ id });
+    }
+    //find interviwer by id
+    async findInterviwerById(id: number) {
+        const search = await this.interviwerRepository.findOneBy({ id });
+        if (!search)
+            throw new HttpException(
+                'Interviwer not found', HttpStatus.BAD_REQUEST);
+        return this.interviwerRepository.findOneBy({ id: id });
     }
 
     //create Interviwer from provider id (provider to interviwer) one to many relationship
@@ -81,6 +118,8 @@ export class JobProviderService {
         return this.interviwerRepository.save(interviwerDetails);
 
     }
+
+
 
 }
 
